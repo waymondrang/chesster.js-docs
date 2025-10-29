@@ -1,0 +1,8 @@
+@use "sass:meta";
+
+// use light mode by default
+@use "./styles/atom-one-light.scss";
+
+html.dark_mode {
+    @include meta.load-css("./styles/atom-one-dark.scss");
+}

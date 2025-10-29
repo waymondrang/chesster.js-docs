@@ -1,0 +1,20 @@
+@use "./root.scss";
+
+// highlight.js
+@use "./highlight.js/dynamic.scss";
+
+@use "./components/buttons.scss";
+@use "./components/sidebar.scss";
+@use "./components/sections.scss";
+@use "./components/hover_effect.scss";
+@use "./components/tooltip.scss";
+@use "./components/tables.scss";
+@use "./components/code.scss";
+@use "./components/callouts.scss";
+@use "./components/footer.scss";
+
+@use "./dark_mode.scss";
+
+// todo: clean up styles.scss
+// note: should be last
+@use "./styles.scss";

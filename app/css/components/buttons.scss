@@ -1,0 +1,29 @@
+/***********/
+/* BUTTONS */
+/***********/
+
+.squareButton {
+    width: 2.5rem;
+    height: 2.5rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: var(--text-color-0);
+    font-size: inherit;
+    text-decoration: none;
+
+    background-color: var(--background-color-1);
+    border: 1px solid var(--border-color-0);
+
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.squareButton:hover {
+    color: var(--text-color-1);
+    background-color: var(--accent-color-0);
+
+    text-decoration: none;
+}

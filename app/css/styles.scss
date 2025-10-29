@@ -1,0 +1,196 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--sans-serif-font-family);
+    line-height: 1.5;
+
+    color: var(--text-color-0);
+    background-color: var(--background-color-0);
+
+    font-size: 1rem;
+}
+
+body > .content {
+    max-width: 1600px;
+    width: 100%;
+    margin: 0 auto;
+
+    position: relative;
+    display: flex;
+}
+
+.material-symbols-outlined {
+    color: inherit;
+}
+
+h1 {
+    letter-spacing: -0.02rem;
+}
+
+/******************/
+/* TEXT SELECTION */
+/******************/
+
+// for firefox
+::-moz-selection {
+    background: var(--accent-color-1);
+}
+
+::selection {
+    background: var(--accent-color-1);
+}
+
+/*********/
+/* TITLE */
+/*********/
+
+h1 span.docs,
+h2 span.docs {
+    font-weight: 600;
+}
+
+/****************/
+/* MAIN CONTENT */
+/****************/
+
+.mainContent {
+    flex: 1;
+    min-width: 0;
+}
+
+.mobileHeader {
+    display: none;
+    position: sticky;
+    top: 0;
+
+    padding: 1rem;
+
+    align-items: center;
+    gap: 1rem;
+
+    background-color: var(--background-color-0);
+    border-bottom: 1px solid var(--border-color-0);
+
+    z-index: 100;
+}
+
+.mobileHeader h1 {
+    font-weight: 400;
+}
+
+.mobileHeader h1 {
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+.widthContainer {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/**************/
+/* TYPOGRAPHY */
+/**************/
+
+h1 {
+    font-size: 2rem;
+    font-weight: 600;
+
+    margin-bottom: 1.2rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: 550;
+
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+h3 {
+    font-size: 1.2rem;
+    font-weight: 500;
+
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+p {
+    margin-bottom: 1rem;
+}
+
+a {
+    color: var(--text-color-0);
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+@media (min-width: 1600px) {
+    .sidebar {
+        border-left: 1px solid var(--border-color-0);
+    }
+}
+
+@media (max-width: 850px) {
+    body > .content {
+        display: block;
+    }
+
+    .sidebar {
+        position: fixed;
+        left: 0;
+        transform: translateX(-100%);
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    .sidebarOverlay.active {
+        display: block;
+    }
+
+    #closeSidebar {
+        display: block;
+    }
+
+    .mainContent {
+        margin-left: 0;
+    }
+
+    .mobileHeader {
+        display: flex;
+    }
+
+    .widthContainer {
+        padding: 1rem;
+    }
+
+    h1 {
+        font-size: 1.7rem;
+    }
+
+    h2 {
+        font-size: 1.3rem;
+    }
+
+    h3 {
+        font-size: 1.15rem;
+    }
+
+    table {
+        font-size: 0.9rem;
+    }
+
+    th,
+    td {
+        padding: 0.5rem;
+    }
+}

@@ -1,0 +1,23 @@
+html.dark_mode {
+    --text-color-0: #f3f3f3;
+    --text-color-1: #e8e8e8;
+    --text-color-2: #dcdcdc;
+
+    --background-color-0: #191919;
+    --background-color-1: #212121;
+    --background-color-2: #2a2a2a;
+    --background-color-3: #161616; // used in code blocks
+
+    --border-color-0: #424242;
+    --border-color-1: #575757;
+
+    // note: fonts, overlay color, and accent color are the same
+
+    .navLink.active {
+        color: var(--text-color-0);
+    }
+
+    .navSection {
+        background-color: var(--background-color-2);
+    }
+}

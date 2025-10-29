@@ -1,0 +1,38 @@
+/*****************/
+/* HOVER TOOLTIP */
+/*****************/
+
+#hoverTooltip {
+    position: fixed;
+
+    opacity: 0;
+    visibility: hidden;
+
+    border: 1px solid var(--border-color-0);
+    background-color: var(--background-color-2);
+
+    z-index: 9999;
+    pointer-events: none;
+}
+
+#hoverTooltip.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+#hoverTooltip div.content {
+    padding: 0.2rem 0.4rem;
+    white-space: nowrap;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.4rem;
+
+    font-weight: 400;
+    font-size: 1rem;
+}
+
+#hoverTooltip span.material-symbols-outlined {
+    font-size: 1rem;
+}

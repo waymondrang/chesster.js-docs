@@ -1,0 +1,141 @@
+/***********/
+/* SIDEBAR */
+/***********/
+
+.sidebar {
+    position: sticky;
+    top: 0;
+
+    width: 280px;
+    min-width: 280px;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    background-color: var(--background-color-0);
+    border-right: 1px solid var(--border-color-0);
+
+    overflow-y: auto;
+    z-index: 9999;
+
+    transition: transform 0.2s cubic-bezier(0.1, 0.7, 0.3, 1);
+}
+
+/************/
+/* SECTIONS */
+/************/
+
+.sidebarHeader {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color-0);
+}
+
+.sidebarHeader > .content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 2rem;
+
+    position: relative;
+}
+
+.sidebarFooter {
+    border-top: 1px solid var(--border-color-0);
+    padding: 1.5rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: end;
+
+    gap: 1rem;
+}
+
+/************/
+/* ELEMENTS */
+/************/
+
+#logo {
+    width: 2rem;
+    height: 2rem;
+}
+
+#logo img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+}
+
+.sidebarHeader h2 {
+    font-size: 1.5rem;
+    font-weight: normal;
+    line-height: 1.2;
+
+    margin: 0;
+    padding: 0;
+}
+
+#closeSidebar {
+    display: none;
+}
+
+.sidebarNav {
+    flex: 1;
+
+    padding: 1rem 0;
+}
+
+.sidebarNav ul {
+    list-style: none;
+}
+
+// non nav-section links
+.sidebarNav > ul > li {
+    margin-bottom: 0.5rem;
+}
+
+// indented (categorized) sections
+.sidebarNav ul ul {
+    margin-left: 1rem;
+    margin-top: 0.5rem;
+}
+
+.navLink {
+    display: block;
+
+    padding: 0.5rem 1.5rem;
+
+    color: var(--text-color-0);
+    text-decoration: none;
+}
+
+.navLink:hover {
+    background-color: var(--background-color-2);
+}
+
+.navLink.active {
+    background-color: var(--accent-color-0);
+    color: var(--background-color-0);
+}
+
+.navSection {
+    display: block;
+    padding: 0.4rem 1.5rem;
+
+    background-color: var(--background-color-1);
+}
+
+.sidebarOverlay {
+    display: none;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background-color: var(--sidebar-overlay-color);
+    z-index: 999;
+}

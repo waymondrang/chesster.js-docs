@@ -1,0 +1,45 @@
+{
+    "name": "chesster.waymondrang.com",
+    "version": "0.0.3",
+    "description": "the homepage of chesster.js, including documentation and a demo page.",
+    "keywords": [
+        "chesster",
+        "documentation"
+    ],
+    "license": "ISC",
+    "author": {
+        "name": "Raymond Wang",
+        "email": "me@waymondrang.com",
+        "url": "https://waymondrang.com"
+    },
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "eslint",
+        "lint:fix": "eslint --fix",
+        "format:check": "prettier --check .",
+        "format:fix": "prettier --write .",
+        "check": "npm run format:check && npm run lint",
+        "fix": "npm run format:fix",
+        "test": "jest"
+    },
+    "dependencies": {
+        "highlight.js": "^11.11.1",
+        "next": "^16.0.1",
+        "react": "^19.2.0",
+        "react-dom": "^19.2.0"
+    },
+    "devDependencies": {
+        "@jest/globals": "^30.2.0",
+        "@types/jest": "^30.0.0",
+        "@types/node": "24.9.2",
+        "@types/react": "19.2.2",
+        "chesster.js": "^0.0.3",
+        "jest": "^30.2.0",
+        "prettier": "^3.6.2",
+        "sass": "^1.93.2",
+        "ts-jest": "^29.4.5",
+        "typescript": "^5.9.3"
+    }
+}
