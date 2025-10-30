@@ -3,7 +3,7 @@ import Callout from "components/Callout";
 export default function IntroductionContent() {
     return (
         <>
-            <h1>chesster.js</h1>
+            <h1>Introduction</h1>
             <p id="bio">
                 chesster.js is a dependency-free TypeScript chess library
                 focused on performance and accuracy. It provides a complete

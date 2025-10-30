@@ -1,5 +1,3 @@
-"use client";
-
 import TinyHeader from "components/TinyHeader";
 import Sidebar from "components/Sidebar";
 import "css/index.scss";
@@ -20,11 +18,11 @@ const googleSansCode = Google_Sans_Code({
     subsets: ["latin"],
 });
 
-// export const metadata: Metadata = {
-//     title: "chesster.js documentation",
-//     description:
-//         "chesster.js is a modern TypeScript library focused on performance and accuracy.",
-// };
+export const metadata: Metadata = {
+    title: "chesster.js documentation",
+    description:
+        "chesster.js is a dependency-free TypeScript chess library focused on performance and accuracy.",
+};
 
 export default function RootLayout({
     children,
@@ -37,29 +35,11 @@ export default function RootLayout({
             suppressHydrationWarning={true}
             className={jxc(manrope.className, googleSansCode.className)}
         >
-            <head
-                onLoad={() => {
-                    document.documentElement.style.backgroundColor = "red";
-                }}
-            >
-                {/* works in conjunction with theme provider */}
-                <script src="/assets/scripts/init_dark_mode.js" async></script>
-
-                <link
-                    rel="icon"
-                    type="image/png"
-                    href="/assets/img/favicon.png"
-                />
-                <link
-                    rel="icon"
-                    type="image/svg+xml"
-                    href="/assets/img/favicon.svg"
-                />
-
-                {/* todo: find better solution to this import */}
+            <head>
+                {/* Note: Icon names in the url MUST be specified in alphabetical order. */}
                 <link
                     rel="stylesheet"
-                    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=arrow_outward"
+                    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=arrow_outward,dark_mode,error,folder_code,left_panel_close,left_panel_open,light_mode,routine&display=block"
                 />
             </head>
 

@@ -1,9 +1,14 @@
 "use client";
 
-import { ReactNode, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useScroll } from "context/ScrollProvider";
 
-function Section({ id, children }: { id: string; children: ReactNode }) {
+interface SectionProps {
+    id: string;
+    children: React.ReactNode;
+}
+
+function Section({ id, children }: SectionProps) {
     const sectionRef = useRef<HTMLElement>(null);
     const { registerSection, unregisterSection } = useScroll();
 

@@ -9,21 +9,26 @@ import {
     useState,
 } from "react";
 import { sections } from "sections/config";
+import { convertRemToPx, isMobileLayout } from "utilities";
 
 const SPY_OFFSET = 200;
+const SCROLL_OFFSET = "2rem";
+const MOBILE_SCROLL_OFFSET = "3rem";
 
 interface ScrollContextType {
     currentSection: string | null;
-
     registerSection: (sectionId: string, element: HTMLElement) => void;
     unregisterSection: (sectionId: string) => void;
+    scrollToSection: (sectionId: string) => void;
+}
 
-    scrollToSection: (sectionId: string, offset?: number) => void;
+interface ScrollProviderProps {
+    children: React.ReactNode;
 }
 
 const ScrollContext = createContext<ScrollContextType | undefined>(undefined);
 
-function ScrollProvider({ children }: { children: React.ReactNode }) {
+function ScrollProvider({ children }: ScrollProviderProps) {
     const [currentSection, setCurrentSection] = useState<string | null>(null);
     const sectionRefs = useRef<Map<string, HTMLElement>>(new Map());
 
@@ -38,7 +43,7 @@ function ScrollProvider({ children }: { children: React.ReactNode }) {
         sectionRefs.current.delete(sectionId);
     }, []);
 
-    const scrollToSection = (sectionId: string, offset: number = 100) => {
+    const scrollToSection = (sectionId: string) => {
         const element = sectionRefs.current.get(sectionId.replace("#", ""));
 
         if (!element) {
@@ -49,7 +54,14 @@ function ScrollProvider({ children }: { children: React.ReactNode }) {
         }
 
         const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - offset;
+        const scrollOffset = convertRemToPx(SCROLL_OFFSET);
+        const mobileScrollOffset = convertRemToPx(MOBILE_SCROLL_OFFSET);
+
+        const offsetPosition =
+            elementPosition +
+            window.pageYOffset -
+            scrollOffset -
+            (isMobileLayout() ? mobileScrollOffset : 0);
 
         window.scrollTo({
             top: offsetPosition,

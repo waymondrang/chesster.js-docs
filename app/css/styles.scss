@@ -60,31 +60,32 @@ h2 span.docs {
 .mainContent {
     flex: 1;
     min-width: 0;
-}
 
-.mobileHeader {
-    display: none;
-    position: sticky;
-    top: 0;
+    .mobileHeader {
+        display: none;
 
-    padding: 1rem;
+        position: sticky;
+        top: 0;
 
-    align-items: center;
-    gap: 1rem;
+        padding: 1rem;
 
-    background-color: var(--background-color-0);
-    border-bottom: 1px solid var(--border-color-0);
+        align-items: center;
+        gap: 1rem;
 
-    z-index: 100;
-}
+        background-color: var(--background-color-0);
+        border-bottom: 1px solid var(--border-color-0);
 
-.mobileHeader h1 {
-    font-weight: 400;
-}
+        z-index: 99;
+    }
 
-.mobileHeader h1 {
-    font-size: 1.25rem;
-    margin: 0;
+    .mobileHeader h1 {
+        font-weight: 400;
+    }
+
+    .mobileHeader h1 {
+        font-size: 1.25rem;
+        margin: 0;
+    }
 }
 
 .widthContainer {
@@ -163,10 +164,10 @@ a:hover {
 
     .mainContent {
         margin-left: 0;
-    }
 
-    .mobileHeader {
-        display: flex;
+        .mobileHeader {
+            display: flex;
+        }
     }
 
     .widthContainer {
