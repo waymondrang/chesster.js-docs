@@ -59,32 +59,39 @@ h2 span.docs {
 
 .mainContent {
     flex: 1;
-    min-width: 0;
-}
+    height: 100vh;
 
-.mobileHeader {
-    display: none;
-    position: sticky;
-    top: 0;
+    display: flex;
+    flex-direction: column;
 
-    padding: 1rem;
+    .mobileHeader {
+        display: none;
+        flex-shrink: 0;
 
-    align-items: center;
-    gap: 1rem;
+        padding: 1rem;
 
-    background-color: var(--background-color-0);
-    border-bottom: 1px solid var(--border-color-0);
+        align-items: center;
+        gap: 1rem;
 
-    z-index: 100;
-}
+        background-color: var(--background-color-0);
+        border-bottom: 1px solid var(--border-color-0);
 
-.mobileHeader h1 {
-    font-weight: 400;
-}
+        z-index: 99;
+    }
 
-.mobileHeader h1 {
-    font-size: 1.25rem;
-    margin: 0;
+    .mobileHeader h1 {
+        font-weight: 400;
+    }
+
+    .mobileHeader h1 {
+        font-size: 1.25rem;
+        margin: 0;
+    }
+
+    .scrollContainer {
+        flex: 1;
+        overflow-y: auto;
+    }
 }
 
 .widthContainer {
@@ -163,10 +170,11 @@ a:hover {
 
     .mainContent {
         margin-left: 0;
-    }
+        height: 100vh; /* Ensure full height on mobile */
 
-    .mobileHeader {
-        display: flex;
+        .mobileHeader {
+            display: flex;
+        }
     }
 
     .widthContainer {

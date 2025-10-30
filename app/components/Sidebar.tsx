@@ -55,7 +55,7 @@ function Sidebar() {
                         <div>
                             <div id="logo">
                                 <Image
-                                    src="/assets/img/favicon.png"
+                                    src="/assets/img/logo.png"
                                     alt="chesster.js logo"
                                     width={32}
                                     height={32}
