@@ -1,3 +1,5 @@
+"use client";
+
 import TinyHeader from "components/TinyHeader";
 import Sidebar from "components/Sidebar";
 import "css/index.scss";
@@ -7,12 +9,22 @@ import { SidebarProvider } from "context/SidebarProvider";
 import { ScrollProvider } from "context/ScrollProvider";
 import { TooltipProvider } from "context/TooltipProvider";
 import { ThemeProvider } from "context/ThemeProvider";
+import { Manrope, Google_Sans_Code } from "next/font/google";
+import { jxc } from "utilities";
 
-export const metadata: Metadata = {
-    title: "chesster.js documentation",
-    description:
-        "chesster.js is a modern TypeScript library focused on performance and accuracy.",
-};
+const manrope = Manrope({
+    subsets: ["latin"],
+});
+
+const googleSansCode = Google_Sans_Code({
+    subsets: ["latin"],
+});
+
+// export const metadata: Metadata = {
+//     title: "chesster.js documentation",
+//     description:
+//         "chesster.js is a modern TypeScript library focused on performance and accuracy.",
+// };
 
 export default function RootLayout({
     children,
@@ -20,10 +32,18 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="en" suppressHydrationWarning={true}>
-            <head>
+        <html
+            lang="en"
+            suppressHydrationWarning={true}
+            className={jxc(manrope.className, googleSansCode.className)}
+        >
+            <head
+                onLoad={() => {
+                    document.documentElement.style.backgroundColor = "red";
+                }}
+            >
                 {/* works in conjunction with theme provider */}
-                <script src="/assets/scripts/init_dark_mode.js"></script>
+                <script src="/assets/scripts/init_dark_mode.js" async></script>
 
                 <link
                     rel="icon"
@@ -36,22 +56,10 @@ export default function RootLayout({
                     href="/assets/img/favicon.svg"
                 />
 
-                {/* google fonts (manrope and google sans code) */}
-                <link rel="preconnect" href="https://fonts.googleapis.com" />
-                <link
-                    rel="preconnect"
-                    href="https://fonts.gstatic.com"
-                    crossOrigin="anonymous"
-                />
-                <link
-                    href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&family=Manrope:wght@200..800&display=swap"
-                    rel="stylesheet"
-                />
-
-                {/* material symbols outlined */}
+                {/* todo: find better solution to this import */}
                 <link
                     rel="stylesheet"
-                    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+                    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=arrow_outward"
                 />
             </head>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useSidebar } from "../context/SidebarProvider";
+import { useSidebar } from "context/SidebarProvider";
 
 function TinyHeader() {
     const { toggleSidebar } = useSidebar();

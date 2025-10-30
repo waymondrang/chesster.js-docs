@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import type { MouseEvent as ReactMouseEvent } from "react";
 import Image from "next/image";
 import { sections } from "sections/config";
@@ -9,15 +9,16 @@ import {
     SectionCategory,
     SectionData,
 } from "sections/sections";
-import { useSidebar } from "../context/SidebarProvider";
+import { useSidebar } from "context/SidebarProvider";
 import { isMobileLayout, jxc } from "utilities";
 import { useScroll } from "context/ScrollProvider";
-import ThemeButton from "./ThemeButton";
+import ThemeButton from "components/ThemeButton";
 import { useTooltipHooks } from "hooks/useHoverTooltip";
 
 function Sidebar() {
-    const groupedSections = useRef<(SectionData | SectionCategory)[]>(
-        groupSectionsByCategory(sections)
+    const groupedSections = useMemo<(SectionData | SectionCategory)[]>(
+        () => groupSectionsByCategory(sections),
+        []
     );
 
     const navRef = useRef<HTMLElement>(null);
@@ -31,7 +32,7 @@ function Sidebar() {
         const href = e.currentTarget.getAttribute("href");
 
         if (!href) {
-            console.log("clicked on navbar link without href attribute");
+            console.warn("clicked on navbar link without href attribute");
             return;
         }
 
@@ -78,7 +79,7 @@ function Sidebar() {
 
                 <nav className="sidebarNav" ref={navRef}>
                     <ul>
-                        {groupedSections.current.map((item, index) => {
+                        {groupedSections.map((item, index) => {
                             if ("sections" in item) {
                                 //////////////
                                 // CATEGORY //

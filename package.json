@@ -1,5 +1,5 @@
 {
-    "name": "chesster.waymondrang.com",
+    "name": "chesster.js-docs",
     "version": "0.0.3",
     "description": "the homepage of chesster.js, including documentation and a demo page.",
     "keywords": [
@@ -13,8 +13,10 @@
         "url": "https://waymondrang.com"
     },
     "scripts": {
-        "dev": "next dev",
-        "build": "next build",
+        "dev": "next dev --turbopack",
+        "build:demo": "cd ./demo && npm ci && npm run build && cd .. && cp -r ./demo/public ./public/demo",
+        "build:next": "next build",
+        "build": "npm run build:demo && npm run build:next",
         "start": "next start",
         "lint": "eslint",
         "lint:fix": "eslint --fix",
@@ -31,11 +33,15 @@
         "react-dom": "^19.2.0"
     },
     "devDependencies": {
+        "@eslint/compat": "^1.4.1",
+        "@eslint/eslintrc": "^3.3.1",
         "@jest/globals": "^30.2.0",
         "@types/jest": "^30.0.0",
         "@types/node": "24.9.2",
         "@types/react": "19.2.2",
         "chesster.js": "^0.0.3",
+        "eslint": "^9.38.0",
+        "eslint-config-next": "^16.0.1",
         "jest": "^30.2.0",
         "prettier": "^3.6.2",
         "sass": "^1.93.2",

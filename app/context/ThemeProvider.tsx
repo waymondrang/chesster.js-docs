@@ -2,13 +2,12 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-type Theme = "light" | "dark" | "system";
-
 const THEME_STORAGE_KEY = "theme";
+type Theme = "light" | "dark" | "system";
 
 declare global {
     interface Window {
-        __THEME__?: {
+        __THEME__: {
             theme: Theme;
             resolvedTheme: "light" | "dark";
         };
@@ -30,9 +29,14 @@ function ThemeProvider({
     storageKey?: string;
 }) {
     const [theme, setTheme] = useState<Theme>(null);
-    const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">(null);
 
-    // Get system preference
+    React.useLayoutEffect(() => {
+        if (typeof window !== "undefined" && window.__THEME__) {
+            setTheme(() => window.__THEME__.theme);
+        }
+    }, []);
+
+    // get system preference
     const getSystemTheme = (): "light" | "dark" => {
         return window.matchMedia("(prefers-color-scheme: dark)").matches
             ? "dark"
@@ -62,7 +66,6 @@ function ThemeProvider({
         localStorage.setItem(THEME_STORAGE_KEY, newTheme);
 
         const resolved = resolveTheme(newTheme);
-        setResolvedTheme(resolved);
         applyTheme(resolved);
     };
 
@@ -84,14 +87,6 @@ function ThemeProvider({
 
         updateTheme(newTheme);
     };
-
-    useEffect(() => {
-        const initData = window.__THEME__;
-        setTheme(initData.theme);
-        setResolvedTheme(initData.resolvedTheme);
-
-        // no need to apply theme here, it was already done by script.
-    }, []);
 
     return (
         <ThemeContext.Provider

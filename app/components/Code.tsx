@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useHighlight } from "../context/HighlightProvider";
+import { useHighlight } from "context/HighlightProvider";
 
 function Code({ language, code }: { language: string; code: string }) {
     const { hljs } = useHighlight();

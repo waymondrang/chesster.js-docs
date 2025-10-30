@@ -1,0 +1,104 @@
+section {
+    margin-bottom: 4rem;
+    padding-top: 1rem;
+}
+
+/****************/
+/* INTRODUCTION */
+/****************/
+
+#bio {
+    font-size: 1.2rem;
+    font-weight: 400;
+}
+
+/********/
+/* DEMO */
+/********/
+
+#demoLink {
+    display: block;
+    position: relative;
+
+    margin-top: 2rem;
+
+    width: 100%;
+    height: 25rem;
+
+    overflow: hidden;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid var(--border-color-0);
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+
+        transition: transform 0.4s cubic-bezier(0.1, 0.7, 0.3, 1);
+    }
+
+    &:hover img {
+        transform: scale(1.04);
+    }
+
+    .playButton {
+        padding: 0.7rem 1.4rem;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+
+        background-color: var(--background-color-3);
+        border: 1px solid var(--border-color-0);
+
+        z-index: 99;
+    }
+
+    &:hover .playButton {
+        color: var(--background-color-3);
+        background-color: var(--accent-color-0);
+    }
+
+    .demo-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.45em;
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            background: var(--background-color-0);
+
+            opacity: 0.5;
+            z-index: 0;
+        }
+
+        span {
+            font-size: 1.5rem;
+            font-weight: 500;
+
+            position: relative;
+
+            z-index: 1;
+        }
+    }
+}

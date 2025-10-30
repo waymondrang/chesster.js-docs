@@ -1,0 +1,4 @@
+[submodule "demo"]
+	path = demo
+	url = https://github.com/waymondrang/chesster.js-demo
+	update = merge

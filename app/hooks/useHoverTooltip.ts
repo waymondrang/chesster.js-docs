@@ -13,7 +13,7 @@ interface UseHoverTooltipReturn {
     onMouseMove: (event: React.MouseEvent) => void;
 }
 
-// todo: update tooltip content when content changes on active element
+// todo: update tooltip content when content changes on active element (or refactor into better solution)
 
 /**
  * custom hooks for implementing tooltip behavior

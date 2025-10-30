@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "baseUrl": "app",
         "target": "ES2017",
         "lib": ["dom", "dom.iterable", "esnext"],
         "allowJs": true,
@@ -18,7 +19,6 @@
                 "name": "next"
             }
         ],
-        "baseUrl": "./app",
         "paths": {
             "@": ["./"]
         }

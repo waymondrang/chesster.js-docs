@@ -6,6 +6,7 @@ import {
     useRef,
     useState,
     ReactNode,
+    useEffect,
 } from "react";
 import { jxc } from "utilities";
 
@@ -15,6 +16,7 @@ interface TooltipPosition {
 }
 
 // todo: decouple tooltip logic from this logic (just responsible for showing and positioning tooltip)
+// todo: fix stutter when calculating position for tooltip (https://react.dev/reference/react/useLayoutEffect#measuring-layout-before-the-browser-repaints-the-screen)
 
 interface TooltipContextType {
     showTooltip: {
@@ -34,9 +36,11 @@ function TooltipProvider({ children }: TooltipProviderProps) {
     const [isVisible, setIsVisible] = useState(false);
     const [content, setContent] = useState<ReactNode>("");
     const [position, setPosition] = useState<TooltipPosition>({ x: 0, y: 0 });
+
     const tooltipRef = useRef<HTMLDivElement>(null);
     const targetElementRef = useRef<HTMLElement | null>(null);
     const touchingRef = useRef(false);
+    const mousePositionRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
     const isExternalLink = (url: string): boolean => {
         try {
@@ -106,21 +110,27 @@ function TooltipProvider({ children }: TooltipProviderProps) {
         setContent(contentNode);
         updateTooltip(event);
 
+        targetElementRef.current = event.currentTarget as HTMLElement;
+
         setIsVisible(true);
     };
 
     const hideTooltip = (): void => {
         setIsVisible(false);
+
         targetElementRef.current = null;
         touchingRef.current = false;
     };
 
     const updateTooltip = (event: React.MouseEvent): void => {
+        // update mouse position tracking
+        mousePositionRef.current = { x: event.clientX, y: event.clientY };
+
         if (!tooltipRef.current) {
             return;
         }
 
-        // Use requestAnimationFrame to ensure DOM has updated
+        // use requestanimationframe to ensure dom has update
         requestAnimationFrame(() => {
             if (!tooltipRef.current) {
                 return;
@@ -132,17 +142,15 @@ function TooltipProvider({ children }: TooltipProviderProps) {
             let x = event.clientX + padding;
             let y = event.clientY - tooltipRect.height - padding;
 
-            // Display tooltip on left of mouse if overflowing
             if (x + tooltipRect.width + padding > window.innerWidth) {
                 x = event.clientX - tooltipRect.width - padding;
             }
 
-            // If still overflowing, display as left as possible
             if (x < 0) {
                 x = padding;
             }
 
-            // Display tooltip beneath mouse if overflowing or if target has bottom class
+            // display tooltip beneath mouse if overflowing or if target has bottom class
             const targetElement = targetElementRef.current;
             if (y < 0 || targetElement?.classList.contains("hoverTipBottom")) {
                 y = event.clientY + padding;
@@ -151,6 +159,42 @@ function TooltipProvider({ children }: TooltipProviderProps) {
             setPosition({ x, y });
         });
     };
+
+    // handle scroll events unless still hovering
+    useEffect(() => {
+        const handleScroll = () => {
+            if (!isVisible || !targetElementRef.current) return;
+
+            const element = targetElementRef.current;
+            const rect = element.getBoundingClientRect();
+            const mouseX = mousePositionRef.current.x;
+            const mouseY = mousePositionRef.current.y;
+
+            const mouseInBounds =
+                mouseX >= rect.left &&
+                mouseX <= rect.right &&
+                mouseY >= rect.top &&
+                mouseY <= rect.bottom;
+
+            if (!mouseInBounds) {
+                hideTooltip();
+            }
+        };
+
+        const handleMouseMove = (event: MouseEvent) => {
+            mousePositionRef.current = { x: event.clientX, y: event.clientY };
+        };
+
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        window.addEventListener("mousemove", handleMouseMove, {
+            passive: true,
+        });
+
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+            window.removeEventListener("mousemove", handleMouseMove);
+        };
+    }, [isVisible]);
 
     return (
         <TooltipContext.Provider

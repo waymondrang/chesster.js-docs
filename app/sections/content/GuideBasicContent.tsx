@@ -1,5 +1,4 @@
 import Callout from "components/Callout";
-import Code from "components/Code";
 
 export default function GuideBasicContent() {
     return (

@@ -161,3 +161,6 @@ Thumbs.db
 # build files
 bundle.js
 *.bundle.js
+
+# ignore built demo path
+public/demo

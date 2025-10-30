@@ -13,7 +13,8 @@ html.dark_mode {
 
     // note: fonts, overlay color, and accent color are the same
 
-    .navLink.active {
+    .navLink.active,
+    #demoLink:hover .playButton {
         color: var(--text-color-0);
     }
 

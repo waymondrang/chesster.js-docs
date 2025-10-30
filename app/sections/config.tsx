@@ -5,6 +5,7 @@ import QuickStartContent from "./content/QuickStartContent";
 import ChessterReference from "./content/api/ChessterReference";
 import GuideBasicContent from "./content/GuideBasicContent";
 import ExamplesContent from "./content/ExamplesContent";
+import DemoContent from "./content/DemoContent";
 
 export const sections: SectionData[] = [
     {
@@ -21,6 +22,11 @@ export const sections: SectionData[] = [
         id: "quick-start",
         title: "Quick Start",
         content: <QuickStartContent />,
+    },
+    {
+        id: "demo",
+        title: "Demo",
+        content: <DemoContent />,
     },
     {
         id: "examples",
