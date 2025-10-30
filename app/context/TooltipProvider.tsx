@@ -1,221 +1,102 @@
 "use client";
 
+import Tooltip from "components/Tooltip";
 import {
     createContext,
     useContext,
     useRef,
     useState,
-    ReactNode,
-    useEffect,
+    useLayoutEffect,
 } from "react";
-import { jxc } from "utilities";
 
-interface TooltipPosition {
+const TOOLTIP_DISTANCE = 10;
+
+interface Position {
     x: number;
     y: number;
 }
 
-// todo: decouple tooltip logic from this logic (just responsible for showing and positioning tooltip)
-// todo: fix stutter when calculating position for tooltip (https://react.dev/reference/react/useLayoutEffect#measuring-layout-before-the-browser-repaints-the-screen)
-
 interface TooltipContextType {
-    showTooltip: {
-        (event: React.MouseEvent, content?: string | ReactNode): void;
-    };
-    hideTooltip: () => void;
-    updateTooltip: (event: React.MouseEvent) => void;
+    setTooltipTarget: (target: Element | null) => void;
+    updateTooltipPosition: (event: React.MouseEvent) => void;
+    setTooltipContent: (content: string | React.ReactNode | null) => void;
 }
 
 const TooltipContext = createContext<TooltipContextType | undefined>(undefined);
 
 interface TooltipProviderProps {
-    children: ReactNode;
+    children: React.ReactNode;
 }
 
 function TooltipProvider({ children }: TooltipProviderProps) {
-    const [isVisible, setIsVisible] = useState(false);
-    const [content, setContent] = useState<ReactNode>("");
-    const [position, setPosition] = useState<TooltipPosition>({ x: 0, y: 0 });
-
+    const [target, setTarget] = useState<Element | null>(null);
     const tooltipRef = useRef<HTMLDivElement>(null);
-    const targetElementRef = useRef<HTMLElement | null>(null);
-    const touchingRef = useRef(false);
-    const mousePositionRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+    const [clientPosition, setClientPosition] = useState<Position>({
+        x: 0,
+        y: 0,
+    });
+    const [customContent, setCustomContent] = useState<
+        string | React.ReactNode | null
+    >(null);
 
-    const isExternalLink = (url: string): boolean => {
-        try {
-            const linkUrl = new URL(url, window.location.href);
-            return linkUrl.hostname !== window.location.hostname;
-        } catch {
-            return false;
-        }
-    };
-
-    const createContentNodeFromEvent = (event: React.MouseEvent): ReactNode => {
-        // note: currently only supports elements with href attribute
-
-        const tagName = event.currentTarget.tagName.toLowerCase();
-
-        if (tagName == "a") {
-            const href = event.currentTarget.getAttribute("href");
-            if (!href) {
-                return (
-                    <div className="content">
-                        <span>href not found</span>
-                    </div>
-                );
-            }
-
-            const isExternal = isExternalLink(href);
-
-            return (
-                <div className="content">
-                    <span>{href}</span>
-
-                    {/* show arrow when link is external */}
-                    {isExternal && (
-                        <span className="material-symbols-outlined">
-                            arrow_outward
-                        </span>
-                    )}
-                </div>
-            );
-        } else {
-            console.warn(
-                "attempted to create content node from unsupported element"
-            );
-        }
-    };
-
-    const showTooltip = (
-        event: React.MouseEvent,
-        content?: string | ReactNode
-    ): void => {
-        let contentNode: ReactNode;
-
-        if (content === undefined) {
-            contentNode = createContentNodeFromEvent(event);
-        } else if (typeof content === "string") {
-            contentNode = (
-                <div className="content">
-                    <span>{content}</span>
-                </div>
-            );
-        } else if (content) {
-            contentNode = content;
-        }
-
-        if (!contentNode) return;
-
-        setContent(contentNode);
-        updateTooltip(event);
-
-        targetElementRef.current = event.currentTarget as HTMLElement;
-
-        setIsVisible(true);
-    };
-
-    const hideTooltip = (): void => {
-        setIsVisible(false);
-
-        targetElementRef.current = null;
-        touchingRef.current = false;
-    };
-
-    const updateTooltip = (event: React.MouseEvent): void => {
-        // update mouse position tracking
-        mousePositionRef.current = { x: event.clientX, y: event.clientY };
-
+    const calculatePosition = (position: Position): Position => {
         if (!tooltipRef.current) {
-            return;
+            return position;
         }
 
-        // use requestanimationframe to ensure dom has update
-        requestAnimationFrame(() => {
-            if (!tooltipRef.current) {
-                return;
-            }
+        const tooltipRect = tooltipRef.current.getBoundingClientRect();
 
-            const tooltipRect = tooltipRef.current.getBoundingClientRect();
-            const padding = 10;
+        let x = position.x + TOOLTIP_DISTANCE;
+        let y = position.y - tooltipRect.height - TOOLTIP_DISTANCE;
 
-            let x = event.clientX + padding;
-            let y = event.clientY - tooltipRect.height - padding;
+        if (x + tooltipRect.width + TOOLTIP_DISTANCE > window.innerWidth) {
+            x = position.x - tooltipRect.width - TOOLTIP_DISTANCE;
+        }
 
-            if (x + tooltipRect.width + padding > window.innerWidth) {
-                x = event.clientX - tooltipRect.width - padding;
-            }
+        if (x < TOOLTIP_DISTANCE) {
+            x = TOOLTIP_DISTANCE;
+        }
 
-            if (x < 0) {
-                x = padding;
-            }
+        if (y < TOOLTIP_DISTANCE) {
+            y = position.y + TOOLTIP_DISTANCE;
+        }
 
-            // display tooltip beneath mouse if overflowing or if target has bottom class
-            const targetElement = targetElementRef.current;
-            if (y < 0 || targetElement?.classList.contains("hoverTipBottom")) {
-                y = event.clientY + padding;
-            }
+        // TODO: add options to update tooltip such as (below, above, padding, etc.
+        // these parameters can be configured per tooltip)
 
-            setPosition({ x, y });
-        });
+        return { x, y };
     };
 
-    // handle scroll events unless still hovering
-    useEffect(() => {
-        const handleScroll = () => {
-            if (!isVisible || !targetElementRef.current) return;
+    const updateTooltipPosition = (event: React.MouseEvent): void => {
+        setClientPosition({ x: event.clientX, y: event.clientY });
+    };
 
-            const element = targetElementRef.current;
-            const rect = element.getBoundingClientRect();
-            const mouseX = mousePositionRef.current.x;
-            const mouseY = mousePositionRef.current.y;
+    // update tooltip position using uselayout to calculate positions accurately
+    useLayoutEffect(() => {
+        if (target && tooltipRef.current) {
+            const newPosition = calculatePosition(clientPosition);
 
-            const mouseInBounds =
-                mouseX >= rect.left &&
-                mouseX <= rect.right &&
-                mouseY >= rect.top &&
-                mouseY <= rect.bottom;
-
-            if (!mouseInBounds) {
-                hideTooltip();
-            }
-        };
-
-        const handleMouseMove = (event: MouseEvent) => {
-            mousePositionRef.current = { x: event.clientX, y: event.clientY };
-        };
-
-        window.addEventListener("scroll", handleScroll, { passive: true });
-        window.addEventListener("mousemove", handleMouseMove, {
-            passive: true,
-        });
-
-        return () => {
-            window.removeEventListener("scroll", handleScroll);
-            window.removeEventListener("mousemove", handleMouseMove);
-        };
-    }, [isVisible]);
+            // directly update position to avoid cascading render warning
+            tooltipRef.current.style.left = `${newPosition.x}px`;
+            tooltipRef.current.style.top = `${newPosition.y}px`;
+        }
+    }, [target, clientPosition]);
 
     return (
         <TooltipContext.Provider
-            value={{ showTooltip, hideTooltip, updateTooltip }}
+            value={{
+                setTooltipTarget: setTarget,
+                updateTooltipPosition,
+                setTooltipContent: setCustomContent,
+            }}
         >
             {children}
 
-            <div
+            <Tooltip
                 ref={tooltipRef}
-                className={jxc(isVisible && "visible")}
-                id="hoverTooltip"
-                style={{
-                    position: "fixed",
-                    left: `${position.x}px`,
-                    top: `${position.y}px`,
-                    pointerEvents: "none",
-                    zIndex: 9999,
-                }}
-            >
-                {content}
-            </div>
+                target={target}
+                customContent={customContent}
+            />
         </TooltipContext.Provider>
     );
 }

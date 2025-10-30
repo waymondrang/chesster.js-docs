@@ -65,6 +65,7 @@ function Sidebar() {
                                 chesster.js <span className="docs">docs</span>
                             </h2>
                         </div>
+
                         <button
                             id="closeSidebar"
                             className="squareButton"
@@ -119,6 +120,7 @@ function Sidebar() {
                                 return (
                                     <li key={item.id}>
                                         <a
+                                            onClick={handleClick}
                                             href={`#${item.id}`}
                                             className={jxc(
                                                 "navLink",

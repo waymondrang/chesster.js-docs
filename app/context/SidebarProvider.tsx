@@ -11,9 +11,13 @@ interface SidebarContextType {
     closeSidebar: () => void;
 }
 
+interface SidebarProviderrProps {
+    children: React.ReactNode;
+}
+
 const SidebarContext = createContext<SidebarContextType | null>(null);
 
-function SidebarProvider({ children }: { children: React.ReactNode }) {
+function SidebarProvider({ children }: SidebarProviderrProps) {
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleSidebar = () => {

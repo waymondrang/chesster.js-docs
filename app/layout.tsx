@@ -36,13 +36,10 @@ export default function RootLayout({
             className={jxc(manrope.className, googleSansCode.className)}
         >
             <head>
-                {/* works in conjunction with theme provider (todo: find a better solution) */}
-                <script src="/assets/scripts/init_dark_mode.js" async></script>
-
                 {/* Note: Icon names in the url MUST be specified in alphabetical order. */}
                 <link
                     rel="stylesheet"
-                    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=arrow_outward,dark_mode,folder_code,left_panel_close,left_panel_open,light_mode,routine&display=block"
+                    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=arrow_outward,dark_mode,error,folder_code,left_panel_close,left_panel_open,light_mode,routine&display=block"
                 />
             </head>
 
@@ -56,10 +53,8 @@ export default function RootLayout({
                                         <Sidebar />
                                         <main className="mainContent">
                                             <TinyHeader />
-                                            <div className="scrollContainer">
-                                                <div className="widthContainer">
-                                                    {children}
-                                                </div>
+                                            <div className="widthContainer">
+                                                {children}
                                             </div>
                                         </main>
                                     </div>

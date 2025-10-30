@@ -11,9 +11,13 @@ interface HighlightContextType {
     hljs: typeof hljs;
 }
 
+interface HighlightProviderProps {
+    children: React.ReactNode;
+}
+
 const HighlightContext = createContext<HighlightContextType | null>(null);
 
-function HighlightProvider({ children }: { children: React.ReactNode }) {
+function HighlightProvider({ children }: HighlightProviderProps) {
     const [hljsInstance] = useState<typeof hljs>(() => {
         ////////////////////////
         // REGISTER LANGUAGES //

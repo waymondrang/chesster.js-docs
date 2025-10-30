@@ -1,10 +1,10 @@
 "use client";
 
 import { useTooltip } from "context/TooltipProvider";
-import { ReactNode, useCallback } from "react";
+import { useEffect } from "react";
 
 interface UseHoverTooltipProps {
-    content?: string | ReactNode;
+    customContent?: string | React.ReactNode | null;
 }
 
 interface UseHoverTooltipReturn {
@@ -13,33 +13,33 @@ interface UseHoverTooltipReturn {
     onMouseMove: (event: React.MouseEvent) => void;
 }
 
-// todo: update tooltip content when content changes on active element (or refactor into better solution)
-
 /**
  * custom hooks for implementing tooltip behavior
  */
 function useTooltipHooks({
-    content,
+    customContent,
 }: UseHoverTooltipProps = {}): UseHoverTooltipReturn {
-    const { showTooltip, hideTooltip, updateTooltip } = useTooltip();
+    const { setTooltipTarget, updateTooltipPosition, setTooltipContent } =
+        useTooltip();
 
-    const handleMouseEnter = useCallback(
-        (event: React.MouseEvent) => {
-            showTooltip(event, content);
-        },
-        [content, showTooltip]
-    );
+    // update tooltip content whenever custom content changes
+    useEffect(() => {
+        setTooltipContent(customContent);
+    }, [customContent, setTooltipContent]);
 
-    const handleMouseLeave = useCallback(() => {
-        hideTooltip();
-    }, [hideTooltip]);
+    const handleMouseEnter = (event: React.MouseEvent) => {
+        setTooltipTarget(event.currentTarget);
+        setTooltipContent(customContent);
+    };
 
-    const handleMouseMove = useCallback(
-        (event: React.MouseEvent) => {
-            updateTooltip(event);
-        },
-        [updateTooltip]
-    );
+    const handleMouseLeave = () => {
+        setTooltipTarget(null);
+        setTooltipContent(null);
+    };
+
+    const handleMouseMove = (event: React.MouseEvent) => {
+        updateTooltipPosition(event);
+    };
 
     return {
         onMouseEnter: handleMouseEnter,

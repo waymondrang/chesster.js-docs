@@ -1,78 +1,48 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { initDarkMode } from "../src/init_dark_mode";
 
-const THEME_STORAGE_KEY = "theme";
-type Theme = "light" | "dark" | "system";
-
-declare global {
-    interface Window {
-        __THEME__: {
-            theme: Theme;
-            resolvedTheme: "light" | "dark";
-        };
-    }
-}
+type UnresolvedTheme = "light" | "dark" | "system";
+type ResolvedTheme = "light" | "dark";
 
 interface ThemeContextType {
-    theme: Theme;
+    theme: UnresolvedTheme | undefined;
     toggleTheme: () => void;
 }
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
-
-function ThemeProvider({
-    children,
-}: {
+interface ThemeContextProps {
     children: React.ReactNode;
-    defaultTheme?: Theme;
-    storageKey?: string;
-}) {
-    const [theme, setTheme] = useState<Theme>(null);
+}
 
-    React.useLayoutEffect(() => {
-        if (typeof window !== "undefined" && window.__THEME__) {
-            setTheme(() => window.__THEME__.theme);
-        }
+const ThemeContext = createContext<ThemeContextType | null>(null);
+
+function ThemeProvider({ children }: ThemeContextProps) {
+    const [unresolvedTheme, setUnresolvedTheme] = useState<
+        UnresolvedTheme | undefined
+    >(undefined);
+
+    useEffect(() => {
+        setUnresolvedTheme(() => getUnresolvedTheme());
     }, []);
 
-    // get system preference
-    const getSystemTheme = (): "light" | "dark" => {
-        return window.matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light";
-    };
+    const updateTheme = (newTheme: UnresolvedTheme) => {
+        setUnresolvedTheme(newTheme);
 
-    const resolveTheme = (currentTheme: Theme): "light" | "dark" => {
-        if (currentTheme === "system") {
-            return getSystemTheme();
+        try {
+            localStorage.setItem("theme", newTheme);
+        } catch {
+            // ignore
         }
-
-        return currentTheme;
-    };
-
-    const applyTheme = (resolvedTheme: "light" | "dark") => {
-        if (resolvedTheme === "dark") {
-            document.documentElement.classList.add("dark_mode");
-        } else {
-            document.documentElement.classList.remove("dark_mode");
-        }
-    };
-
-    const updateTheme = (newTheme: Theme) => {
-        setTheme(newTheme);
-
-        // todo: verify that we do not need to check window or document
-        localStorage.setItem(THEME_STORAGE_KEY, newTheme);
 
         const resolved = resolveTheme(newTheme);
         applyTheme(resolved);
     };
 
     const toggleTheme = () => {
-        let newTheme: Theme;
+        let newTheme: UnresolvedTheme;
 
-        switch (theme) {
+        switch (unresolvedTheme) {
             case "light":
                 newTheme = "dark";
                 break;
@@ -91,14 +61,63 @@ function ThemeProvider({
     return (
         <ThemeContext.Provider
             value={{
-                theme,
+                theme: unresolvedTheme,
                 toggleTheme,
             }}
         >
+            <script
+                suppressHydrationWarning={true}
+                dangerouslySetInnerHTML={{
+                    __html: `(${initDarkMode.toString()})()`,
+                }}
+            />
+
             {children}
         </ThemeContext.Provider>
     );
 }
+
+///////////////////////
+// UTILITY FUNCTIONS //
+///////////////////////
+
+const getUnresolvedTheme = (): UnresolvedTheme | undefined => {
+    if (typeof window === "undefined") {
+        return undefined;
+    }
+
+    return getSavedTheme() || "system";
+};
+
+const getSavedTheme = (): UnresolvedTheme | null => {
+    try {
+        return localStorage.getItem("theme") as UnresolvedTheme | null;
+    } catch {
+        return null;
+    }
+};
+
+const getSystemTheme = (): ResolvedTheme => {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
+};
+
+const resolveTheme = (theme: UnresolvedTheme): ResolvedTheme => {
+    if (theme === "system") {
+        return getSystemTheme();
+    }
+
+    return theme;
+};
+
+const applyTheme = (theme: ResolvedTheme) => {
+    if (theme === "dark") {
+        document.documentElement.classList.add("dark_mode");
+    } else {
+        document.documentElement.classList.remove("dark_mode");
+    }
+};
 
 function useTheme() {
     const context = useContext(ThemeContext);

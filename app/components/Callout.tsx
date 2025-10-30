@@ -1,6 +1,5 @@
 "use client";
 
-import { ReactNode } from "react";
 import { jxc } from "utilities";
 
 function Callout({
@@ -10,7 +9,7 @@ function Callout({
 }: {
     type?: "note" | "warning";
     title: string;
-    children: ReactNode;
+    children: React.ReactNode;
 }) {
     return (
         <div

@@ -9,17 +9,23 @@ export default function ThemeButton() {
     return (
         <button
             {...useTooltipHooks({
-                content: "Toggle themes",
+                customContent:
+                    theme === "system"
+                        ? "System"
+                        : theme === "dark"
+                          ? "Dark mode"
+                          : "Light mode",
             })}
             onClick={toggleTheme}
             className="squareButton"
         >
             <span className="material-symbols-outlined symbol">
-                {theme === "system"
-                    ? "routine"
-                    : theme === "dark"
-                      ? "dark_mode"
-                      : "light_mode"}
+                {theme &&
+                    (theme === "system"
+                        ? "routine"
+                        : theme === "dark"
+                          ? "dark_mode"
+                          : "light_mode")}
             </span>
         </button>
     );

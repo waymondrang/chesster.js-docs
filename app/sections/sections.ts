@@ -1,10 +1,8 @@
-import { ReactNode } from "react";
-
 interface SectionData {
     id: string;
     title: string;
     category?: string;
-    content: ReactNode;
+    content: React.ReactNode;
 }
 
 interface SectionCategory {
@@ -35,7 +33,7 @@ function groupSectionsByCategory(
                     result.push(currentSectionCategory);
                 }
 
-                currentCategory = sections[i].category;
+                currentCategory = sections[i].category ?? "";
                 currentSectionCategory = {
                     name: currentCategory,
                     sections: [sections[i]],
