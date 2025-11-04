@@ -1,6 +1,6 @@
 import TinyHeader from "components/TinyHeader";
 import Sidebar from "components/Sidebar";
-import "css/index.scss";
+import "scss/index.scss";
 import type { Metadata } from "next";
 import { HighlightProvider } from "context/HighlightProvider";
 import { SidebarProvider } from "context/SidebarProvider";

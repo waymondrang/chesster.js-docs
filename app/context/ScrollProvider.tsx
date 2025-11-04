@@ -9,17 +9,13 @@ import {
     useState,
 } from "react";
 import { sections } from "sections/config";
-import { convertRemToPx, isMobileLayout } from "utilities";
 
 const SPY_OFFSET = 200;
-const SCROLL_OFFSET = "2rem";
-const MOBILE_SCROLL_OFFSET = "3rem";
 
 interface ScrollContextType {
     currentSection: string | null;
     registerSection: (sectionId: string, element: HTMLElement) => void;
     unregisterSection: (sectionId: string) => void;
-    scrollToSection: (sectionId: string) => void;
 }
 
 interface ScrollProviderProps {
@@ -43,32 +39,6 @@ function ScrollProvider({ children }: ScrollProviderProps) {
         sectionRefs.current.delete(sectionId);
     }, []);
 
-    const scrollToSection = (sectionId: string) => {
-        const element = sectionRefs.current.get(sectionId.replace("#", ""));
-
-        if (!element) {
-            console.warn(
-                `attempted to scroll to non-existent section with id: ${sectionId}`
-            );
-            return;
-        }
-
-        const elementPosition = element.getBoundingClientRect().top;
-        const scrollOffset = convertRemToPx(SCROLL_OFFSET);
-        const mobileScrollOffset = convertRemToPx(MOBILE_SCROLL_OFFSET);
-
-        const offsetPosition =
-            elementPosition +
-            window.pageYOffset -
-            scrollOffset -
-            (isMobileLayout() ? mobileScrollOffset : 0);
-
-        window.scrollTo({
-            top: offsetPosition,
-            behavior: "smooth",
-        });
-    };
-
     useEffect(() => {
         const scrollSpyer = () => {
             const scrollPosition = window.scrollY + SPY_OFFSET;
@@ -87,6 +57,7 @@ function ScrollProvider({ children }: ScrollProviderProps) {
                     scrollPosition >= offsetTop &&
                     scrollPosition < offsetBottom
                 ) {
+                    // todo: check
                     setCurrentSection(section.id);
                     break;
                 }
@@ -107,7 +78,6 @@ function ScrollProvider({ children }: ScrollProviderProps) {
         <ScrollContext.Provider
             value={{
                 currentSection,
-                scrollToSection,
                 registerSection,
                 unregisterSection,
             }}

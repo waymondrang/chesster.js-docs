@@ -23,6 +23,7 @@ function ThemeProvider({ children }: ThemeContextProps) {
     >(undefined);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setUnresolvedTheme(() => getUnresolvedTheme());
     }, []);
 

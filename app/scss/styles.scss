@@ -4,6 +4,11 @@
     box-sizing: border-box;
 }
 
+html {
+    overflow: auto;
+    scroll-padding-top: 2rem;
+}
+
 body {
     font-family: var(--sans-serif-font-family);
     line-height: 1.5;
@@ -140,6 +145,10 @@ a:hover {
 }
 
 @media (max-width: 850px) {
+    html {
+        scroll-padding-top: 5rem;
+    }
+
     body > .content {
         display: block;
     }

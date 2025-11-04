@@ -24,20 +24,9 @@ function Sidebar() {
     const navRef = useRef<HTMLElement>(null);
 
     const { isOpen, closeSidebar } = useSidebar();
-    const { scrollToSection, currentSection } = useScroll();
+    const { currentSection } = useScroll();
 
     function handleClick(e: ReactMouseEvent<HTMLAnchorElement>): void {
-        e.preventDefault();
-
-        const href = e.currentTarget.getAttribute("href");
-
-        if (!href) {
-            console.warn("clicked on navbar link without href attribute");
-            return;
-        }
-
-        scrollToSection(href);
-
         if (isMobileLayout()) closeSidebar();
     }
 
