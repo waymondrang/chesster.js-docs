@@ -131,7 +131,7 @@ function Sidebar() {
                     <a
                         {...useTooltipHooks()}
                         className="squareButton"
-                        href="https://github.com/waymondrang/chesster.waymondrang.com"
+                        href="https://github.com/waymondrang/chesster.js-docs"
                     >
                         <span className="material-symbols-outlined">
                             folder_code
